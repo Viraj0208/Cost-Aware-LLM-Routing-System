@@ -1,0 +1,70 @@
+# Model registry — defines available models, costs, and capabilities
+
+models:
+  # Small/fast models
+  phi-2:
+    display_name: "Phi-2 (2.7B)"
+    tier: small
+    parameters: 2.7e9
+    cost_per_1k_input_tokens: 0.001
+    cost_per_1k_output_tokens: 0.002
+    avg_latency_ms: 45
+    max_context_length: 2048
+    quality_scores:
+      general: 0.62
+      code: 0.58
+      math: 0.45
+      reasoning: 0.50
+
+  llama-2-7b:
+    display_name: "Llama-2-7B"
+    tier: small
+    parameters: 7.0e9
+    cost_per_1k_input_tokens: 0.002
+    cost_per_1k_output_tokens: 0.003
+    avg_latency_ms: 80
+    max_context_length: 4096
+    quality_scores:
+      general: 0.70
+      code: 0.65
+      math: 0.52
+      reasoning: 0.60
+
+  # Large/capable models
+  llama-2-13b:
+    display_name: "Llama-2-13B"
+    tier: large
+    parameters: 13.0e9
+    cost_per_1k_input_tokens: 0.01
+    cost_per_1k_output_tokens: 0.02
+    avg_latency_ms: 150
+    max_context_length: 4096
+    quality_scores:
+      general: 0.82
+      code: 0.78
+      math: 0.68
+      reasoning: 0.75
+
+  llama-2-70b:
+    display_name: "Llama-2-70B"
+    tier: large
+    parameters: 70.0e9
+    cost_per_1k_input_tokens: 0.03
+    cost_per_1k_output_tokens: 0.06
+    avg_latency_ms: 350
+    max_context_length: 4096
+    quality_scores:
+      general: 0.92
+      code: 0.88
+      math: 0.82
+      reasoning: 0.88
+
+# TensorRT optimization profiles
+optimization:
+  fp16:
+    speedup_factor: 2.0
+    quality_retention: 0.99
+  int8:
+    speedup_factor: 3.5
+    quality_retention: 0.95
+    requires_calibration: true

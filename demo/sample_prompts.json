@@ -1,0 +1,254 @@
+{
+  "prompts": [
+    {
+      "text": "What is the capital of France?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Who invented the telephone?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Define photosynthesis.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What is 15 + 27?",
+      "expected_tier": "small",
+      "category": "math"
+    },
+    {
+      "text": "Translate 'hello' to Spanish.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What color is the sky?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Name three planets in our solar system.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What year did World War II end?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Hello, how are you?",
+      "expected_tier": "small",
+      "category": "greeting"
+    },
+    {
+      "text": "Is Python a programming language? Yes or no.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "List five common fruits.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "When was the Eiffel Tower built?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What is the boiling point of water?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Who wrote Romeo and Juliet?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What does CPU stand for?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Explain the theory of general relativity step by step, including how it differs from special relativity. Provide mathematical formulations where appropriate.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Write a Python function that implements a balanced binary search tree with insertion, deletion, and search operations. Include type hints and comprehensive error handling.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Compare and contrast the economic policies of Keynesian economics and monetarism. Analyze their effectiveness during the 2008 financial crisis and provide examples.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Implement a distributed hash table in Python with consistent hashing. The implementation should handle node failures gracefully and support dynamic scaling.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Solve the following system of differential equations and explain each step: dy/dx = 3x^2 + 2y, dz/dx = y - z. Use the method of variation of parameters.",
+      "expected_tier": "large",
+      "category": "math"
+    },
+    {
+      "text": "Analyze the implications of quantum computing on current encryption standards. Discuss Shor's algorithm, post-quantum cryptography alternatives, and timeline predictions.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Design a microservices architecture for an e-commerce platform. Include service decomposition, API gateway patterns, event-driven communication, and deployment strategies. Provide code examples.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Explain why transformer models outperform RNNs for long-range dependencies. Compare the attention mechanism with LSTM gating, analyze computational complexity, and discuss recent alternatives like Mamba.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Write a comprehensive implementation of the A* pathfinding algorithm with multiple heuristic options. Include visualization of the search process and performance benchmarks.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Derive the Black-Scholes option pricing formula from first principles. Explain each assumption, the role of Ito's lemma, and discuss the limitations of the model in practice.",
+      "expected_tier": "large",
+      "category": "math"
+    },
+    {
+      "text": "Evaluate the pros and cons of different database paradigms (relational, document, graph, time-series) for a real-time analytics platform processing 1M events/second.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Implement a neural network from scratch in Python (no frameworks) with backpropagation, batch normalization, and dropout. Train it on a simple dataset and visualize the training curves.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "What is machine learning?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Summarize briefly what an API is.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Write a recursive Fibonacci function in Python with memoization. Analyze the time and space complexity.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "What is the difference between a list and a tuple in Python?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Calculate the eigenvalues of the matrix [[2,1],[1,3]] and find the corresponding eigenvectors.",
+      "expected_tier": "large",
+      "category": "math"
+    },
+    {
+      "text": "Explain why the sky is blue.",
+      "expected_tier": "small",
+      "category": "reasoning"
+    },
+    {
+      "text": "1. What is containerization?\n2. How does Docker work?\n3. What is Kubernetes?\n4. Compare Docker Swarm vs Kubernetes.\n5. When should you use each?",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Debug this Python code and explain the fix: def factorial(n): return n * factorial(n-1)",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "What does HTML stand for?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Implement a thread-safe producer-consumer queue in Python using asyncio. Include proper shutdown handling, backpressure mechanisms, and comprehensive unit tests.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Name the continents.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Analyze the algorithmic complexity of quicksort in the best, average, and worst cases. Prove the average case is O(n log n) using the recurrence relation.",
+      "expected_tier": "large",
+      "category": "math"
+    },
+    {
+      "text": "What is an operating system?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "How does the internet work? Give a brief explanation.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Write a Python class implementing a LRU cache with O(1) get and put operations using a doubly linked list and hash map.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Explain step by step how gradient descent optimizes a neural network's weights. Include the math behind backpropagation and discuss different optimizer variants (SGD, Adam, RMSprop).",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "True or false: The Earth orbits the Sun.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "What is the speed of light?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Design and implement a rate limiter using the token bucket algorithm. Support multiple rate limiting strategies and provide a FastAPI middleware integration.",
+      "expected_tier": "large",
+      "category": "code"
+    },
+    {
+      "text": "Who is the president of the United States?",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Compare and contrast TCP and UDP protocols. Analyze their performance characteristics in different scenarios including gaming, video streaming, and financial trading. Provide packet-level analysis.",
+      "expected_tier": "large",
+      "category": "reasoning"
+    },
+    {
+      "text": "Define the word 'algorithm'.",
+      "expected_tier": "small",
+      "category": "factual"
+    },
+    {
+      "text": "Implement a complete GraphQL server in Python with authentication, pagination, real-time subscriptions, and N+1 query optimization. Include database integration and testing.",
+      "expected_tier": "large",
+      "category": "code"
+    }
+  ]
+}

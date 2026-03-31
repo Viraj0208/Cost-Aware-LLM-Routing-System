@@ -1,0 +1,54 @@
+# Default configuration for Cost-Aware LLM Routing System
+
+mode: simulation  # simulation | local | production
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:8501"  # Streamlit
+
+router:
+  threshold: 0.5              # Complexity score above this routes to large model
+  use_ml_classifier: false    # Use DistilBERT classifier (requires ML dependencies)
+  ml_model_path: "models/router/distilbert-complexity"
+  onnx_model_path: "models/router/router.onnx"
+  feature_weights:
+    ml_score: 0.7
+    rule_score: 0.3
+  max_input_tokens: 512
+
+models:
+  small:
+    name: "phi-2"
+    tier: "small"
+    cost_per_1k_tokens: 0.002
+    avg_latency_ms: 50
+    max_context_length: 2048
+    quality_score: 0.65
+    backend: "mock"
+  large:
+    name: "llama-2-70b"
+    tier: "large"
+    cost_per_1k_tokens: 0.06
+    avg_latency_ms: 200
+    max_context_length: 4096
+    quality_score: 0.92
+    backend: "mock"
+
+cost:
+  currency: "USD"
+  budget_alert_threshold: 100.0  # Alert when cumulative cost exceeds this
+  track_savings: true
+
+monitoring:
+  prometheus_enabled: true
+  log_level: "INFO"
+  log_format: "json"
+
+triton:
+  url: "localhost:8001"
+  protocol: "grpc"           # grpc | http
+  model_repository: "src/triton/model_repository"
+  request_timeout_ms: 30000

@@ -1,0 +1,56 @@
+# Routing rules and threshold configuration
+
+thresholds:
+  default: 0.5              # Base complexity threshold
+  conservative: 0.3         # Route more to large model (higher quality)
+  aggressive: 0.7           # Route more to small model (lower cost)
+
+# Rule-based complexity indicators
+complexity_indicators:
+  # Keywords that suggest high complexity
+  high_complexity_keywords:
+    - "explain in detail"
+    - "step by step"
+    - "analyze"
+    - "compare and contrast"
+    - "write a function"
+    - "implement"
+    - "debug"
+    - "optimize"
+    - "prove"
+    - "derive"
+    - "multi-step"
+    - "algorithm"
+    - "architecture"
+
+  # Keywords that suggest low complexity
+  low_complexity_keywords:
+    - "what is"
+    - "define"
+    - "translate"
+    - "summarize briefly"
+    - "yes or no"
+    - "true or false"
+    - "list"
+    - "name"
+    - "when was"
+    - "who is"
+
+  # Feature thresholds
+  token_count_high: 200     # Prompts longer than this tend to be complex
+  token_count_low: 30       # Prompts shorter than this tend to be simple
+  unique_token_ratio_high: 0.8  # High vocabulary diversity = complex
+
+# Quality-based routing overrides
+quality_rules:
+  # Always route these categories to large model
+  force_large:
+    - "code_generation"
+    - "mathematical_proof"
+    - "multi_step_reasoning"
+
+  # Always route these to small model
+  force_small:
+    - "simple_factual"
+    - "greeting"
+    - "translation_short"

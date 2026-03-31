@@ -1,0 +1,16 @@
+# Development configuration — simulation mode on Windows
+
+mode: simulation
+
+router:
+  use_ml_classifier: false  # Use rule-based routing in dev
+
+models:
+  small:
+    backend: "mock"
+  large:
+    backend: "mock"
+
+monitoring:
+  log_level: "DEBUG"
+  log_format: "text"

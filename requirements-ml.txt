@@ -1,0 +1,5 @@
+# ML dependencies (for router training and ONNX inference)
+torch>=2.0
+transformers>=4.30
+datasets>=2.14
+onnxruntime>=1.16

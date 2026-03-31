@@ -1,0 +1,13 @@
+FROM nvcr.io/nvidia/tritonserver:24.01-py3
+
+# Install Python dependencies for BLS models
+RUN pip install --no-cache-dir transformers tokenizers
+
+# Copy model repository
+COPY src/triton/model_repository /models
+
+# Expose Triton ports: HTTP, gRPC, Metrics
+EXPOSE 8000 8001 8002
+
+# Start Triton with the model repository
+CMD ["tritonserver", "--model-repository=/models", "--strict-model-config=false"]

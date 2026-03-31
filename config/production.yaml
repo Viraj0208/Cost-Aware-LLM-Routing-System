@@ -1,0 +1,23 @@
+# Production configuration — Triton Inference Server
+
+mode: production
+
+router:
+  use_ml_classifier: true
+  onnx_model_path: null  # Use TensorRT engine via Triton
+
+models:
+  small:
+    name: "phi-2-tensorrt"
+    backend: "triton"
+  large:
+    name: "llama-2-70b-tensorrt"
+    backend: "triton"
+
+monitoring:
+  log_level: "INFO"
+  log_format: "json"
+
+triton:
+  url: "triton-server:8001"
+  protocol: "grpc"

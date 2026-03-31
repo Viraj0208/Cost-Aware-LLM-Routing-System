@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  # FastAPI application server
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_MODE=production
+      - TRITON_URL=triton:8001
+    depends_on:
+      - triton
+    restart: unless-stopped
+
+  # NVIDIA Triton Inference Server
+  triton:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.triton
+    ports:
+      - "8001:8001"  # gRPC
+      - "8002:8002"  # Metrics
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # Streamlit demo UI
+  demo:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    command: ["streamlit", "run", "demo/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped

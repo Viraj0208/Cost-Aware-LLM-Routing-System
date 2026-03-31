@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Data & Models
+training/data/*.csv
+training/data/*.json
+training/data/*.parquet
+training/checkpoints/
+models/*.onnx
+models/*.plan
+models/*.engine
+*.onnx
+*.plan
+*.engine
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Triton model artifacts (generated)
+src/triton/model_repository/*/1/model.plan
+src/triton/model_repository/*/1/model.onnx
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude
+.claude/

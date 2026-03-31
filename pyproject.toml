@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "cost-aware-llm-router"
+version = "0.1.0"
+description = "Cost-Aware LLM Routing System Using TensorRT-Optimized Models on Triton Inference Server"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "pyyaml>=6.0",
+    "fastapi>=0.100",
+    "uvicorn[standard]>=0.20",
+    "httpx>=0.24",
+    "prometheus-client>=0.17",
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+]
+
+[project.optional-dependencies]
+ml = [
+    "torch>=2.0",
+    "transformers>=4.30",
+    "datasets>=2.14",
+    "onnxruntime>=1.16",
+]
+triton = [
+    "tritonclient[all]>=2.36",
+]
+demo = [
+    "streamlit>=1.28",
+    "plotly>=5.15",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio>=0.21",
+    "pytest-cov>=4.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "benchmark: marks tests as benchmarks (deselect with '-m \"not benchmark\"')",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
