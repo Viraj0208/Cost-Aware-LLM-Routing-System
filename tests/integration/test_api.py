@@ -133,6 +133,23 @@ def test_invalid_request(client):
     assert resp.status_code == 422  # Validation error
 
 
+def test_invalid_forced_model_returns_400(client):
+    resp = client.post("/v1/completions", json={
+        "prompt": "Hello",
+        "force_model": "not-a-model",
+    })
+    assert resp.status_code == 400
+    assert "Unknown force_model" in resp.json()["detail"]
+
+
+def test_oversized_prompt_returns_400(client):
+    resp = client.post("/v1/completions", json={
+        "prompt": "word " * 500,
+    })
+    assert resp.status_code == 400
+    assert "Prompt is too long" in resp.json()["detail"]
+
+
 def test_response_has_timing_header(client):
     resp = client.get("/health")
     assert "X-Response-Time" in resp.headers

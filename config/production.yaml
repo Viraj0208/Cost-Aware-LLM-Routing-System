@@ -9,15 +9,15 @@ router:
 models:
   small:
     name: "phi-2-tensorrt"
-    backend: "triton"
+    backend: "mock"
   large:
     name: "llama-2-70b-tensorrt"
-    backend: "triton"
+    backend: "mock"
 
 monitoring:
   log_level: "INFO"
   log_format: "json"
 
 triton:
-  url: "triton-server:8001"
+  url: "triton:8001"
   protocol: "grpc"

@@ -105,6 +105,10 @@ class TestRoutingEngine:
         assert decision.target_model == "llama-2-70b"
         assert "forced" in decision.reasoning[0].lower()
 
+    def test_invalid_forced_model_rejected(self):
+        with pytest.raises(ValueError, match="Unknown force_model"):
+            self.engine.route("Hello", force_model="not-a-model")
+
     def test_decision_has_cost_estimates(self):
         decision = self.engine.route("What is Python?")
         assert decision.estimated_cost >= 0

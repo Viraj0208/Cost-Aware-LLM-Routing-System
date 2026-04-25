@@ -43,11 +43,12 @@ class InferencePipeline:
         model_registry: ModelRegistry,
         backends: dict[str, ModelBackend],
         cost_tracker: CostTracker | None = None,
+        complexity_predictor: Any | None = None,
     ) -> None:
         self._settings = settings
         self._registry = model_registry
         self._backends = backends  # model_name -> backend
-        self._routing_engine = RoutingEngine(settings, model_registry)
+        self._routing_engine = RoutingEngine(settings, model_registry, complexity_predictor)
         self._preprocessor = Preprocessor(max_tokens=settings.router.max_input_tokens)
         self._cost_calculator = CostCalculator(
             small_model_cost_per_1k=settings.models.small.cost_per_1k_tokens,
@@ -128,30 +129,18 @@ class InferencePipeline:
         )
 
     def _get_backend(self, model_name: str) -> ModelBackend:
-        """Get the backend for a given model, with fallback logic."""
+        """Get the backend for a given model."""
         if model_name in self._backends:
             return self._backends[model_name]
-
-        # Fallback: try to match by tier
-        small_name = self._settings.models.small.name
-        large_name = self._settings.models.large.name
-
-        if model_name == large_name and small_name in self._backends:
-            # If large model not available, check if we have any backend
-            pass  # Fall through to error
-
-        if model_name == small_name and large_name in self._backends:
-            pass  # Fall through to error
-
-        # Return any available backend as last resort
-        if self._backends:
-            return next(iter(self._backends.values()))
 
         raise RuntimeError(f"No backend available for model '{model_name}'")
 
     async def health_check(self) -> dict[str, bool]:
         """Check health of all backends."""
         results = {}
+        predictor = getattr(self._routing_engine, "_ml_classifier", None)
+        if predictor is not None and hasattr(predictor, "health_check"):
+            results["triton_router"] = predictor.health_check()
         for name, backend in self._backends.items():
             try:
                 results[name] = await backend.health_check()

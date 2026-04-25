@@ -11,6 +11,9 @@ httpx>=0.24
 # Monitoring
 prometheus-client>=0.17
 
+# Triton client for production-mode router inference
+tritonclient[all]>=2.36
+
 # Data & ML utilities
 numpy>=1.24
 scikit-learn>=1.3

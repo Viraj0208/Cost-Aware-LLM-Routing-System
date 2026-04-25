@@ -1,0 +1,14 @@
+{
+  "input_name": "FEATURES",
+  "output_name": "LOGITS",
+  "input_shape": [
+    1,
+    10
+  ],
+  "classes": [
+    "simple",
+    "complex"
+  ],
+  "trtexec_fp16": "trtexec --onnx=router.onnx --saveEngine=model.plan --fp16 --minShapes=FEATURES:1x10 --optShapes=FEATURES:1x10 --maxShapes=FEATURES:1x10",
+  "trtexec_fp32": "trtexec --onnx=router.onnx --saveEngine=model.plan --minShapes=FEATURES:1x10 --optShapes=FEATURES:1x10 --maxShapes=FEATURES:1x10"
+}

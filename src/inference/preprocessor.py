@@ -29,6 +29,11 @@ class Preprocessor:
         cleaned = " ".join(cleaned.split())
 
         token_count = estimate_token_count(cleaned)
+        if token_count > self._max_tokens:
+            raise ValueError(
+                f"Prompt is too long: estimated {token_count} tokens, "
+                f"maximum allowed is {self._max_tokens}."
+            )
 
         return PreprocessedInput(
             original_prompt=prompt,

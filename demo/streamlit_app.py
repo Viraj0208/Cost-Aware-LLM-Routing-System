@@ -8,14 +8,17 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 import time
 from pathlib import Path
+from types import SimpleNamespace
 
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import httpx
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -26,6 +29,61 @@ from src.cost.tracker import CostTracker
 from src.inference.pipeline import InferencePipeline
 from src.models.base import GenerationParams
 from src.models.mock_backend import MockBackend
+
+
+API_URL = os.getenv("API_URL", "").rstrip("/")
+USE_API = bool(API_URL)
+
+
+def _to_namespace(value):
+    if isinstance(value, dict):
+        return SimpleNamespace(**{k: _to_namespace(v) for k, v in value.items()})
+    if isinstance(value, list):
+        return [_to_namespace(item) for item in value]
+    return value
+
+
+def run_completion(prompt: str):
+    """Run completion through FastAPI when API_URL is set, otherwise locally."""
+    if USE_API:
+        response = httpx.post(
+            f"{API_URL}/v1/completions",
+            json={"prompt": prompt},
+            timeout=60,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return SimpleNamespace(
+            text=data["text"],
+            model_used=data["model_used"],
+            model_tier=data["model_tier"],
+            routing_decision=_to_namespace(data["routing"]),
+            cost=_to_namespace(data["cost"]),
+            total_latency_ms=data["latency_ms"],
+        )
+
+    loop = asyncio.new_event_loop()
+    result = loop.run_until_complete(get_pipeline().run(prompt))
+    loop.close()
+    return result
+
+
+def get_cost_summary():
+    """Get analytics summary from FastAPI or the local pipeline."""
+    if USE_API:
+        response = httpx.get(f"{API_URL}/v1/analytics/costs", timeout=10)
+        response.raise_for_status()
+        return _to_namespace(response.json())
+    return get_pipeline().cost_tracker.get_summary()
+
+
+def reset_analytics():
+    """Reset analytics through FastAPI or the local pipeline."""
+    if USE_API:
+        response = httpx.post(f"{API_URL}/v1/analytics/reset", timeout=10)
+        response.raise_for_status()
+    else:
+        get_pipeline().cost_tracker.reset()
 
 
 # --- Session State Initialization ---
@@ -82,37 +140,40 @@ st.caption("Intelligent query routing to minimize inference cost while maintaini
 with st.sidebar:
     st.header("Settings")
 
-    pipeline = get_pipeline()
     init_history()
 
-    threshold = st.slider(
-        "Routing Threshold",
-        min_value=0.0,
-        max_value=1.0,
-        value=pipeline.routing_engine.threshold_manager.threshold,
-        step=0.05,
-        help="Prompts with complexity score above this threshold are routed to the large model.",
-    )
-    pipeline.routing_engine.threshold_manager.threshold = threshold
+    if USE_API:
+        st.info(f"Using API: {API_URL}")
+    else:
+        pipeline = get_pipeline()
+        threshold = st.slider(
+            "Routing Threshold",
+            min_value=0.0,
+            max_value=1.0,
+            value=pipeline.routing_engine.threshold_manager.threshold,
+            step=0.05,
+            help="Prompts with complexity score above this threshold are routed to the large model.",
+        )
+        pipeline.routing_engine.threshold_manager.threshold = threshold
 
-    st.divider()
+        st.divider()
 
-    mode = st.radio(
-        "Threshold Mode",
-        ["Custom", "Conservative (0.3)", "Default (0.5)", "Aggressive (0.7)"],
-        index=0,
-    )
-    if mode.startswith("Conservative"):
-        pipeline.routing_engine.threshold_manager.set_mode("conservative")
-    elif mode.startswith("Default"):
-        pipeline.routing_engine.threshold_manager.set_mode("default")
-    elif mode.startswith("Aggressive"):
-        pipeline.routing_engine.threshold_manager.set_mode("aggressive")
+        mode = st.radio(
+            "Threshold Mode",
+            ["Custom", "Conservative (0.3)", "Default (0.5)", "Aggressive (0.7)"],
+            index=0,
+        )
+        if mode.startswith("Conservative"):
+            pipeline.routing_engine.threshold_manager.set_mode("conservative")
+        elif mode.startswith("Default"):
+            pipeline.routing_engine.threshold_manager.set_mode("default")
+        elif mode.startswith("Aggressive"):
+            pipeline.routing_engine.threshold_manager.set_mode("aggressive")
 
     st.divider()
 
     st.subheader("Model Info")
-    settings = load_settings(mode="simulation")
+    settings = load_settings(mode="production" if USE_API else "simulation")
     st.markdown(f"""
     **Small Model:** {settings.models.small.name}
     - Cost: ${settings.models.small.cost_per_1k_tokens}/1K tokens
@@ -124,7 +185,7 @@ with st.sidebar:
     """)
 
     if st.button("Reset Analytics"):
-        pipeline.cost_tracker.reset()
+        reset_analytics()
         st.session_state.history = []
         st.success("Analytics reset!")
 
@@ -159,9 +220,7 @@ with tab1:
 
         if st.button("Route & Generate", type="primary", use_container_width=True) and prompt:
             with st.spinner("Routing and generating..."):
-                loop = asyncio.new_event_loop()
-                result = loop.run_until_complete(pipeline.run(prompt))
-                loop.close()
+                result = run_completion(prompt)
 
             # Store in history
             st.session_state.history.append({
@@ -209,7 +268,7 @@ with tab1:
 # --- Tab 2: Analytics ---
 
 with tab2:
-    summary = pipeline.cost_tracker.get_summary()
+    summary = get_cost_summary()
 
     if summary.total_requests == 0:
         st.info("No requests yet. Try some prompts in the 'Try It' tab to see analytics.")
@@ -286,10 +345,8 @@ with tab3:
         results = []
 
         progress = st.progress(0)
-        loop = asyncio.new_event_loop()
-
         for i, item in enumerate(prompts):
-            result = loop.run_until_complete(pipeline.run(item["text"]))
+            result = run_completion(item["text"])
             correct = result.model_tier == item["expected_tier"]
             results.append({
                 "prompt": item["text"][:60] + "...",
@@ -301,8 +358,6 @@ with tab3:
                 "savings_pct": result.cost.savings_pct,
             })
             progress.progress((i + 1) / len(prompts))
-
-        loop.close()
 
         df = pd.DataFrame(results)
         accuracy = df["correct"].mean()

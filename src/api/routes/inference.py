@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import get_pipeline
 from src.api.schemas import (
@@ -32,11 +32,16 @@ async def create_completion(
         temperature=request.temperature,
     )
 
-    result = await pipeline.run(
-        prompt=request.prompt,
-        params=params,
-        force_model=request.force_model,
-    )
+    try:
+        result = await pipeline.run(
+            prompt=request.prompt,
+            params=params,
+            force_model=request.force_model,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
     # Record Prometheus metrics
     pm.REQUESTS_TOTAL.labels(model=result.model_used, tier=result.model_tier).inc()
@@ -85,7 +90,12 @@ async def route_only(
     pipeline: InferencePipeline = Depends(get_pipeline),
 ) -> RouteOnlyResponse:
     """Get routing decision without generating a response."""
-    decision = pipeline.routing_engine.route(request.prompt)
+    try:
+        decision = pipeline.routing_engine.route(request.prompt)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
     return RouteOnlyResponse(
         target_model=decision.target_model,

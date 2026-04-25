@@ -37,12 +37,13 @@ class RoutingEngine:
         self,
         settings: Settings,
         model_registry: ModelRegistry,
+        complexity_predictor: Any | None = None,
     ) -> None:
         self._settings = settings
         self._registry = model_registry
         self._feature_extractor = FeatureExtractor()
         self._threshold_manager = ThresholdManager(settings.router.threshold)
-        self._ml_classifier = None  # Initialized later if ML is enabled
+        self._ml_classifier = complexity_predictor
 
     @property
     def threshold_manager(self) -> ThresholdManager:
@@ -63,6 +64,15 @@ class RoutingEngine:
 
             # If model is forced, skip routing logic
             if force_model:
+                valid_models = {
+                    self._settings.models.small.name,
+                    self._settings.models.large.name,
+                }
+                if force_model not in valid_models:
+                    available = ", ".join(sorted(valid_models))
+                    raise ValueError(
+                        f"Unknown force_model '{force_model}'. Available models: {available}."
+                    )
                 return self._build_decision(
                     target_model_name=force_model,
                     complexity_score=features.rule_based_score,

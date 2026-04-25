@@ -40,9 +40,7 @@ def pipeline():
 
 
 def test_simple_prompt_uses_small_model(pipeline):
-    result = asyncio.get_event_loop().run_until_complete(
-        pipeline.run("What is 2+2?")
-    )
+    result = asyncio.run(pipeline.run("What is 2+2?"))
     assert result.model_tier == "small"
     assert result.text  # Non-empty response
     assert result.cost.cost_usd > 0
@@ -55,25 +53,25 @@ def test_complex_prompt_uses_large_model(pipeline):
         "insertion, deletion, and search operations. Explain the time "
         "complexity step by step."
     )
-    result = asyncio.get_event_loop().run_until_complete(
-        pipeline.run(prompt)
-    )
+    result = asyncio.run(pipeline.run(prompt))
     assert result.model_tier == "large"
     assert result.text
     assert len(result.text) > 50  # Large model gives detailed response
 
 
 def test_forced_model_override(pipeline):
-    result = asyncio.get_event_loop().run_until_complete(
-        pipeline.run("Hello", force_model="llama-2-70b")
-    )
+    result = asyncio.run(pipeline.run("Hello", force_model="llama-2-70b"))
     assert result.model_used == "llama-2-70b"
 
 
+def test_invalid_forced_model_rejected(pipeline):
+    with pytest.raises(ValueError, match="Unknown force_model"):
+        asyncio.run(pipeline.run("Hello", force_model="not-a-model"))
+
+
 def test_cost_tracking_accumulates(pipeline):
-    loop = asyncio.get_event_loop()
     for prompt in ["What is Python?", "Define AI.", "Who is Einstein?"]:
-        loop.run_until_complete(pipeline.run(prompt))
+        asyncio.run(pipeline.run(prompt))
 
     summary = pipeline.cost_tracker.get_summary()
     assert summary.total_requests == 3
@@ -81,16 +79,12 @@ def test_cost_tracking_accumulates(pipeline):
 
 
 def test_small_model_saves_cost(pipeline):
-    result = asyncio.get_event_loop().run_until_complete(
-        pipeline.run("What is the capital of Japan?")
-    )
+    result = asyncio.run(pipeline.run("What is the capital of Japan?"))
     assert result.cost.savings_pct > 0  # Should save vs always using large
 
 
 def test_pipeline_health_check(pipeline):
-    health = asyncio.get_event_loop().run_until_complete(
-        pipeline.health_check()
-    )
+    health = asyncio.run(pipeline.health_check())
     assert all(status is True for status in health.values())
 
 
@@ -100,12 +94,11 @@ def test_pipeline_with_sample_prompts(pipeline):
     with open(sample_path) as f:
         data = json.load(f)
 
-    loop = asyncio.get_event_loop()
     correct = 0
     total = len(data["prompts"])
 
     for item in data["prompts"]:
-        result = loop.run_until_complete(pipeline.run(item["text"]))
+        result = asyncio.run(pipeline.run(item["text"]))
         if result.model_tier == item["expected_tier"]:
             correct += 1
 
