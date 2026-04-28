@@ -29,6 +29,26 @@ Client / Streamlit
     -> Analytics + Prometheus Metrics
 ```
 
+## Landing Page
+
+A standalone visual showcase of the system is available at `index.html` in the
+project root. It is a single self-contained HTML file with no build step that
+runs in any modern browser.
+
+```bash
+# Open directly
+start index.html        # Windows
+open  index.html        # macOS
+
+# Or serve locally
+python -m http.server 8000
+# then visit http://localhost:8000
+```
+
+The page includes a live, interactive routing demo in the hero section: type a
+prompt and watch the heuristic complexity classifier route it to the
+appropriate model with a 3D packet animation.
+
 ## Quick Start
 
 ### 1. Install dependencies
