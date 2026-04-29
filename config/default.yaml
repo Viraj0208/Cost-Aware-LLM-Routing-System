@@ -6,8 +6,10 @@ api:
   host: "0.0.0.0"
   port: 8000
   cors_origins:
+    - "http://localhost:8000"
     - "http://localhost:3000"
     - "http://localhost:8501"  # Streamlit
+    - "null"                  # file:// origin
 
 router:
   threshold: 0.5              # Complexity score above this routes to large model

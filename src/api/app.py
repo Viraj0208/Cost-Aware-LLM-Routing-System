@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from src.api.middleware import TimingMiddleware
 from src.api.routes import inference, health, metrics, analytics
-from src.config.settings import get_settings
+from src.config.settings import get_settings, PROJECT_ROOT
 from src.monitoring.logger import setup_logging
 
 
@@ -30,30 +31,26 @@ def create_app() -> FastAPI:
         version="0.1.0",
     )
 
-    # Middleware
+    # Allow all origins for demo — frontend served from same host
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.api.cors_origins,
-        allow_credentials=True,
+        allow_origins=["*"],
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     app.add_middleware(TimingMiddleware)
 
-    # Routes
+    # API routes (registered before static files so they take precedence)
     app.include_router(inference.router, tags=["Inference"])
     app.include_router(health.router, tags=["Health"])
     app.include_router(metrics.router, tags=["Monitoring"])
     app.include_router(analytics.router, tags=["Analytics"])
 
+    # Serve the frontend dashboard at root
     @app.get("/")
-    async def root():
-        return {
-            "name": "Cost-Aware LLM Routing System",
-            "version": "0.1.0",
-            "mode": settings.mode,
-            "docs": "/docs",
-        }
+    async def serve_frontend() -> FileResponse:
+        return FileResponse(PROJECT_ROOT / "index.html")
 
     return app
 
