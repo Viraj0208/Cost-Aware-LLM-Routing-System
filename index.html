@@ -1230,6 +1230,191 @@
       font-family: "JetBrains Mono", monospace;
     }
 
+    /* ── API Status (navbar) ────────────────────────────── */
+    .nav-api-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .nav-api-status.online { border-color: rgba(16,185,129,0.4); color: #10b981; }
+    .nav-api-status.offline { border-color: rgba(239,68,68,0.4); color: #ef4444; }
+    .nav-api-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; flex-shrink: 0;
+    }
+    .nav-api-status.online .nav-api-dot { animation: tickerPulse 1.5s ease-in-out infinite; }
+
+    /* ── Live Playground section ──────────────────────────── */
+    .playground {
+      background: var(--bg);
+      padding: 120px 80px;
+      position: relative;
+    }
+    .playground::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,158,11,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,158,11,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .playground > * { position: relative; z-index: 1; }
+
+    .playground-grid {
+      max-width: 1280px;
+      margin: 60px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .pg-card {
+      background: rgba(10,15,30,0.85);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 28px;
+      backdrop-filter: blur(8px);
+    }
+    .pg-input-card { border-color: rgba(6,182,212,0.2); }
+    .pg-result-card { border-color: rgba(245,158,11,0.2); }
+
+    .api-status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 12px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.12em;
+      margin-bottom: 14px; border: 1px solid;
+    }
+    .api-status-badge.checking { border-color: rgba(148,163,184,0.3); color: var(--muted); background: rgba(148,163,184,0.06); }
+    .api-status-badge.online  { border-color: rgba(16,185,129,0.4); color: #10b981; background: rgba(16,185,129,0.07); }
+    .api-status-badge.offline { border-color: rgba(239,68,68,0.4); color: #ef4444; background: rgba(239,68,68,0.07); }
+    .api-status-badge .status-dot-sm {
+      width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0;
+    }
+    .api-status-badge.online .status-dot-sm { animation: tickerPulse 1.5s ease-in-out infinite; }
+
+    .pg-textarea {
+      width: 100%; min-height: 110px;
+      background: rgba(0,0,26,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; padding: 12px 14px;
+      color: var(--white); font-family: "JetBrains Mono", monospace;
+      font-size: 12.5px; resize: vertical; outline: none;
+      line-height: 1.55; transition: border-color 0.2s; box-sizing: border-box;
+    }
+    .pg-textarea:focus { border-color: var(--amber); box-shadow: 0 0 18px rgba(245,158,11,0.08); }
+    .pg-textarea::placeholder { color: var(--muted); }
+
+    .pg-controls {
+      display: flex; gap: 10px; margin-top: 12px; align-items: center;
+    }
+    .pg-select {
+      background: rgba(0,0,26,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px; padding: 8px 12px;
+      color: var(--muted); font-family: "JetBrains Mono", monospace;
+      font-size: 11px; outline: none; flex: 1; cursor: pointer;
+    }
+    .pg-select option { background: #0a0f1e; }
+    .pg-submit {
+      background: var(--amber); color: #000; border: none;
+      padding: 9px 20px; border-radius: 4px;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      letter-spacing: 0.1em; font-weight: 700; cursor: pointer;
+      transition: filter 0.2s, box-shadow 0.2s; white-space: nowrap;
+    }
+    .pg-submit:hover { filter: brightness(1.1); box-shadow: var(--amber-glow); }
+    .pg-submit:disabled { opacity: 0.45; cursor: not-allowed; filter: none; box-shadow: none; }
+
+    .pg-hint {
+      margin-top: 10px; font-family: "JetBrains Mono", monospace;
+      font-size: 10px; color: var(--muted); opacity: 0.7;
+    }
+    .pg-hint code {
+      background: rgba(255,255,255,0.06); padding: 1px 5px;
+      border-radius: 3px; font-size: 0.95em;
+    }
+
+    .pg-placeholder {
+      color: var(--muted); font-family: "JetBrains Mono", monospace;
+      font-size: 12px; text-align: center; padding: 28px 0; opacity: 0.6;
+    }
+    .pg-decision { display: flex; flex-direction: column; gap: 15px; }
+    .pg-model-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pg-model-name { font-family: "Space Grotesk", sans-serif; font-size: 22px; font-weight: 700; }
+    .pg-tier-badge {
+      padding: 3px 9px; border-radius: 4px;
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid;
+    }
+    .pg-tier-badge.small { background: rgba(6,182,212,0.12); color: var(--cyan); border-color: rgba(6,182,212,0.3); }
+    .pg-tier-badge.large { background: rgba(245,158,11,0.12); color: var(--amber); border-color: rgba(245,158,11,0.3); }
+
+    .pg-score-row {
+      display: flex; align-items: center; gap: 10px;
+      font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted);
+    }
+    .pg-score-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .pg-score-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--amber)); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+    .pg-cost-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .pg-cost-cell {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px; padding: 10px 12px;
+    }
+    .pg-cost-label { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+    .pg-cost-value { font-family: "Space Grotesk", sans-serif; font-size: 17px; font-weight: 700; margin-top: 4px; }
+
+    .pg-reasoning {
+      background: rgba(0,0,26,0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 6px; padding: 12px;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      color: var(--muted); line-height: 1.6;
+    }
+    .pg-reason-item { padding: 2px 0; display: flex; gap: 8px; }
+    .pg-reason-item::before { content: "→"; color: var(--amber); flex-shrink: 0; }
+    .pg-latency { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+
+    .pg-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .pg-stat { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; padding: 12px 14px; }
+    .pg-stat-value { font-family: "Space Grotesk", sans-serif; font-size: 20px; font-weight: 700; color: var(--cyan); }
+    .pg-stat-value.amber { color: var(--amber); }
+    .pg-stat-label { font-family: "JetBrains Mono", monospace; font-size: 9px; color: var(--muted); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .pg-history-list { display: flex; flex-direction: column; gap: 6px; }
+    .pg-history-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; background: rgba(255,255,255,0.02);
+      border-radius: 5px; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    }
+    .pg-history-model { font-weight: 700; min-width: 90px; flex-shrink: 0; }
+    .pg-history-prompt { color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pg-history-cost { color: var(--cyan); white-space: nowrap; }
+
+    .pg-error { color: #ef4444; font-family: "JetBrains Mono", monospace; font-size: 11px; line-height: 1.6; }
+
+    @media (max-width: 1024px) {
+      .playground-grid { grid-template-columns: 1fr; }
+      .playground { padding-left: 40px; padding-right: 40px; }
+    }
+    @media (max-width: 768px) {
+      .playground { padding: 84px 20px; }
+      .pg-cost-row { grid-template-columns: 1fr 1fr; }
+    }
+
     @media (max-width: 1024px) {
       .navbar-inner {
         padding: 20px 32px;
@@ -1403,6 +1588,7 @@
   </style>
 </head>
 <body>
+  <div id="cursor"></div>
   <div id="grain"></div>
   <div id="donut-tooltip"></div>
 
@@ -1413,7 +1599,12 @@
         <a href="#overview" data-hover>OVERVIEW</a>
         <a href="#solution" data-hover>HOW IT WORKS</a>
         <a href="#metrics" data-hover>METRICS</a>
+        <a href="#playground" data-hover>PLAYGROUND</a>
         <a href="#architecture" data-hover>ARCHITECTURE</a>
+        <span class="nav-api-status checking" id="nav-api-status" title="API at localhost:8000">
+          <span class="nav-api-dot"></span>
+          <span id="nav-api-text">API</span>
+        </span>
       </div>
     </div>
     <div id="scroll-progress"></div>
@@ -1652,9 +1843,92 @@
     </div>
   </section>
 
+  <!-- ── Live Playground ─────────────────────────────────────── -->
+  <section class="playground" id="playground">
+    <div class="center-head">
+      <div class="section-tag">05 / LIVE PLAYGROUND</div>
+      <h2 class="section-title">Real API Integration</h2>
+      <p class="body-copy" style="margin: 14px auto 0; text-align: center; max-width: 600px;">
+        Start the server, then interact with the live routing engine below.
+        Run: <code style="background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:4px;font-size:0.85em;font-family:'JetBrains Mono',monospace;">uvicorn src.api.app:app --reload</code>
+      </p>
+    </div>
+    <div class="playground-grid">
+
+      <!-- Input -->
+      <div class="pg-card pg-input-card">
+        <div class="card-title">PROMPT INPUT</div>
+        <div class="api-status-badge checking" id="pg-api-status">
+          <span class="status-dot-sm"></span>
+          <span id="pg-status-text">CHECKING API...</span>
+        </div>
+        <textarea class="pg-textarea" id="pg-prompt"
+          placeholder="Enter any prompt to route through the system&#10;&#10;Simple: 'What is the capital of France?'&#10;Complex: 'Implement a balanced BST with AVL rotations in Python'"
+        ></textarea>
+        <div class="pg-controls">
+          <select class="pg-select" id="pg-force-model">
+            <option value="">Auto-route (recommended)</option>
+            <option value="phi-2">Force: phi-2 (small model)</option>
+            <option value="llama-2-70b">Force: llama-2-70b (large model)</option>
+          </select>
+          <button class="pg-submit" id="pg-submit" data-hover>ANALYZE →</button>
+        </div>
+        <div class="pg-hint">Ctrl+Enter to submit &nbsp;·&nbsp; Calls <code>POST /v1/route</code></div>
+      </div>
+
+      <!-- Routing Decision Result -->
+      <div class="pg-card pg-result-card">
+        <div class="card-title">ROUTING DECISION</div>
+        <div id="pg-result-content">
+          <div class="pg-placeholder">Submit a prompt to see the real routing decision</div>
+        </div>
+      </div>
+
+      <!-- Live Session Stats -->
+      <div class="pg-card">
+        <div class="card-title">SESSION ANALYTICS &nbsp;<span style="font-size:9px;opacity:0.5;">auto-refreshes · GET /v1/analytics/costs</span></div>
+        <div class="pg-stats-grid">
+          <div class="pg-stat">
+            <div class="pg-stat-value" id="pg-total-requests">—</div>
+            <div class="pg-stat-label">Total Requests</div>
+          </div>
+          <div class="pg-stat">
+            <div class="pg-stat-value amber" id="pg-savings">—</div>
+            <div class="pg-stat-label">Total Savings</div>
+          </div>
+          <div class="pg-stat">
+            <div class="pg-stat-value" id="pg-small-pct">—</div>
+            <div class="pg-stat-label">Small Model %</div>
+          </div>
+          <div class="pg-stat">
+            <div class="pg-stat-value amber" id="pg-avg-cost">—</div>
+            <div class="pg-stat-label">Avg Cost/Req</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <button id="pg-reset"
+            style="background:transparent;border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:5px 14px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;cursor:pointer;transition:background 0.2s;"
+            onmouseover="this.style.background='rgba(239,68,68,0.1)'"
+            onmouseout="this.style.background='transparent'">
+            RESET ANALYTICS
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Decisions History -->
+      <div class="pg-card">
+        <div class="card-title">RECENT DECISIONS</div>
+        <div id="pg-history">
+          <div class="pg-placeholder">No requests yet this session</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <section class="architecture" id="architecture">
     <div class="center-head">
-      <div class="section-tag">05 / ARCHITECTURE</div>
+      <div class="section-tag">06 / ARCHITECTURE</div>
       <h2 class="section-title">System Architecture</h2>
     </div>
     <div class="architecture-wrap" id="architecture-wrap">
@@ -1712,7 +1986,7 @@
 
   <section class="tech" id="tech">
     <div class="center-head">
-      <div class="section-tag">06 / BUILT WITH</div>
+      <div class="section-tag">07 / BUILT WITH</div>
       <h2 class="section-title">The Stack</h2>
     </div>
     <div class="tech-grid">
@@ -1738,12 +2012,33 @@
         <a href="#overview" data-hover>OVERVIEW</a>
         <a href="#solution" data-hover>HOW IT WORKS</a>
         <a href="#metrics" data-hover>METRICS</a>
+        <a href="#playground" data-hover>PLAYGROUND</a>
         <a href="#architecture" data-hover>ARCHITECTURE</a>
       </div>
     </div>
   </footer>
 
   <script>
+    // Auto-detect API base URL: same origin if served via FastAPI, else localhost:8000
+    const API_BASE = (function () {
+      const loc = window.location;
+      if (loc.protocol === "http:" && loc.port === "8000") return loc.origin;
+      return "http://localhost:8000";
+    })();
+
+    async function apiFetch(path, options) {
+      const controller = new AbortController();
+      const tid = setTimeout(function () { controller.abort(); }, 4000);
+      try {
+        const resp = await fetch(API_BASE + path, Object.assign({}, options, { signal: controller.signal }));
+        clearTimeout(tid);
+        return resp;
+      } catch (err) {
+        clearTimeout(tid);
+        throw err;
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       gsap.registerPlugin(ScrollTrigger);
 
@@ -2088,67 +2383,82 @@
         const savingsText = document.getElementById("demo-savings");
         if (!input || !button || !result || !meter || !complexityText || !modelText || !costText || !savingsText) return;
 
-        function classify(prompt) {
+        // Local fallback classifier (used when API is offline)
+        function classifyLocal(prompt) {
           const text = prompt.toLowerCase().trim();
           if (!text) return 1;
           let score = 1;
           if (text.length > 40) score += 1;
           if (text.length > 120) score += 1;
-          const complexKeywords = [
-            "analyze", "explain", "compare", "reason", "design", "architect",
-            "optimize", "debug", "refactor", "derive", "prove", "synthesize",
-            "code", "implement", "algorithm", "trade-off", "tradeoff", "evaluate"
-          ];
-          const highComplexKeywords = ["quantum", "mechanics", "entanglement", "distributed", "architecture"];
-          const simpleKeywords = ["what is", "who is", "when", "list", "name", "define"];
-          if (complexKeywords.some(function (k) { return text.includes(k); })) score += 1;
-          if (highComplexKeywords.some(function (k) { return text.includes(k); })) score += 2;
-          if (simpleKeywords.some(function (k) { return text.includes(k); })) score -= 1;
+          const complexKw = ["analyze","explain","compare","reason","design","architect","optimize","debug","refactor","derive","prove","synthesize","code","implement","algorithm","trade-off","tradeoff","evaluate"];
+          const highKw = ["quantum","mechanics","entanglement","distributed","architecture"];
+          const simpleKw = ["what is","who is","when","list","name","define"];
+          if (complexKw.some(function (k) { return text.includes(k); })) score += 1;
+          if (highKw.some(function (k) { return text.includes(k); })) score += 2;
+          if (simpleKw.some(function (k) { return text.includes(k); })) score -= 1;
           if ((text.match(/\?/g) || []).length >= 2) score += 1;
           if (/\b(function|class|const|let|def|import)\b/.test(text)) score += 2;
           return Math.min(5, Math.max(1, score));
         }
 
-        function pickModel(complexity) {
-          if (complexity <= 2) return {
-            name: "GPT-3.5", cost: 0.0005, gpt4Cost: 0.030, color: "#06b6d4", nodeName: "Mistral"
-          };
-          if (complexity === 3) return {
-            name: "Gemini Pro", cost: 0.004, gpt4Cost: 0.030, color: "#3b82f6", nodeName: "Gemini"
-          };
-          if (complexity === 4) return {
-            name: "Claude 3", cost: 0.015, gpt4Cost: 0.030, color: "#06b6d4", nodeName: "Claude"
-          };
-          return {
-            name: "GPT-4 Turbo", cost: 0.030, gpt4Cost: 0.030, color: "#f59e0b", nodeName: "GPT-4"
-          };
+        function pickModelLocal(complexity) {
+          if (complexity <= 2) return { name: "phi-2",       cost: 0.0004, gpt4Cost: 0.012, color: "#06b6d4", nodeName: "Mistral"  };
+          if (complexity === 3) return { name: "phi-2",       cost: 0.0008, gpt4Cost: 0.012, color: "#06b6d4", nodeName: "Mistral"  };
+          return                       { name: "llama-2-70b", cost: 0.012,  gpt4Cost: 0.012, color: "#f59e0b", nodeName: "GPT-4"    };
         }
 
         function fireRoutingPacket(targetNodeName) {
           window.dispatchEvent(new CustomEvent("demo-route", { detail: { node: targetNodeName } }));
         }
 
-        function runDemo() {
-          const prompt = input.value.trim();
-          if (!prompt) {
-            input.focus();
-            return;
-          }
-          const complexity = classify(prompt);
-          const model = pickModel(complexity);
-          const saved = (model.gpt4Cost - model.cost).toFixed(4);
-
+        function showFallback(prompt) {
+          const complexity = classifyLocal(prompt);
+          const model = pickModelLocal(complexity);
+          const saved = (model.gpt4Cost - model.cost).toFixed(5);
           result.classList.add("active");
           meter.style.width = (complexity * 20) + "%";
-          complexityText.textContent = complexity + " / 5";
+          complexityText.textContent = complexity + " / 5 (sim)";
           modelText.textContent = model.name;
           modelText.style.color = model.color;
-          costText.textContent = "$" + model.cost.toFixed(4);
-          savingsText.textContent = saved > 0
-            ? "(saved $" + saved + " vs GPT-4)"
-            : "(highest tier required)";
-
+          costText.textContent = "$" + model.cost.toFixed(5);
+          savingsText.textContent = parseFloat(saved) > 0 ? "(~" + (parseFloat(saved) / model.gpt4Cost * 100).toFixed(0) + "% cheaper)" : "(top tier)";
           fireRoutingPacket(model.nodeName);
+        }
+
+        async function runDemo() {
+          const prompt = input.value.trim();
+          if (!prompt) { input.focus(); return; }
+
+          button.disabled = true;
+          button.textContent = "ROUTING...";
+
+          try {
+            const resp = await apiFetch("/v1/route", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt: prompt })
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              const isLarge = data.target_tier === "large";
+              const savings = data.potential_savings_pct || 0;
+              result.classList.add("active");
+              meter.style.width = Math.round(data.complexity_score * 100) + "%";
+              complexityText.textContent = data.complexity_score.toFixed(3);
+              modelText.textContent = data.target_model;
+              modelText.style.color = isLarge ? "#f59e0b" : "#06b6d4";
+              costText.textContent = "$" + (data.estimated_cost || 0).toFixed(6);
+              savingsText.textContent = savings > 0.5 ? "(" + savings.toFixed(0) + "% cheaper)" : "(top tier)";
+              fireRoutingPacket(isLarge ? "GPT-4" : "Mistral");
+            } else {
+              showFallback(prompt);
+            }
+          } catch (err) {
+            showFallback(prompt);
+          }
+
+          button.disabled = false;
+          button.textContent = "ROUTE →";
         }
 
         button.addEventListener("click", runDemo);
@@ -2161,16 +2471,242 @@
         const savedEl = document.getElementById("ticker-saved");
         const routedEl = document.getElementById("ticker-routed");
         if (!savedEl || !routedEl) return;
-        let saved = 0;
-        let routed = 0;
+        let fallbackSaved = 0, fallbackRouted = 0;
 
-        setInterval(function () {
-          const newRoutes = Math.floor(Math.random() * 4) + 1;
-          routed += newRoutes;
-          saved += newRoutes * (0.008 + Math.random() * 0.012);
-          savedEl.textContent = "$" + saved.toFixed(4);
-          routedEl.textContent = routed.toLocaleString("en-US");
-        }, 1200);
+        async function tryFetchTicker() {
+          try {
+            const resp = await apiFetch("/v1/analytics/costs");
+            if (resp.ok) {
+              const data = await resp.json();
+              savedEl.textContent = "$" + data.total_savings_usd.toFixed(4);
+              routedEl.textContent = data.total_requests.toLocaleString("en-US");
+              return true;
+            }
+          } catch (err) {}
+          return false;
+        }
+
+        tryFetchTicker().then(function (success) {
+          if (success) {
+            setInterval(tryFetchTicker, 5000);
+          } else {
+            setInterval(function () {
+              const newRoutes = Math.floor(Math.random() * 4) + 1;
+              fallbackRouted += newRoutes;
+              fallbackSaved += newRoutes * (0.008 + Math.random() * 0.012);
+              savedEl.textContent = "$" + fallbackSaved.toFixed(4);
+              routedEl.textContent = fallbackRouted.toLocaleString("en-US");
+            }, 1200);
+          }
+        });
+      }
+
+      function initNavApiStatus() {
+        const badge = document.getElementById("nav-api-status");
+        const text = document.getElementById("nav-api-text");
+        if (!badge || !text) return;
+
+        async function check() {
+          try {
+            const resp = await apiFetch("/health");
+            if (resp.ok) {
+              badge.className = "nav-api-status online";
+              text.textContent = "API LIVE";
+              return;
+            }
+          } catch (err) {}
+          badge.className = "nav-api-status offline";
+          text.textContent = "API OFFLINE";
+        }
+        check();
+        setInterval(check, 12000);
+      }
+
+      function initLivePlayground() {
+        const promptEl = document.getElementById("pg-prompt");
+        const submitBtn = document.getElementById("pg-submit");
+        const resetBtn = document.getElementById("pg-reset");
+        const resultContent = document.getElementById("pg-result-content");
+        const pgApiStatus = document.getElementById("pg-api-status");
+        const pgStatusText = document.getElementById("pg-status-text");
+        const historyEl = document.getElementById("pg-history");
+        if (!promptEl || !submitBtn) return;
+
+        const localHistory = [];
+
+        function escHtml(str) {
+          return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+        }
+
+        async function checkApiStatus() {
+          try {
+            const resp = await apiFetch("/health");
+            if (resp.ok) {
+              const data = await resp.json();
+              pgApiStatus.className = "api-status-badge online";
+              pgStatusText.textContent = "API ONLINE · " + data.mode.toUpperCase() + " MODE";
+              fetchStats();
+              return true;
+            }
+          } catch (err) {}
+          pgApiStatus.className = "api-status-badge offline";
+          pgStatusText.textContent = "API OFFLINE — start the server first";
+          return false;
+        }
+
+        async function fetchStats() {
+          try {
+            const [costsResp, routeResp] = await Promise.all([
+              apiFetch("/v1/analytics/costs"),
+              apiFetch("/v1/analytics/routing")
+            ]);
+            if (costsResp.ok) {
+              const c = await costsResp.json();
+              const totalEl = document.getElementById("pg-total-requests");
+              const savingsEl = document.getElementById("pg-savings");
+              const avgEl = document.getElementById("pg-avg-cost");
+              if (totalEl) totalEl.textContent = c.total_requests.toLocaleString("en-US");
+              if (savingsEl) savingsEl.textContent = "$" + c.total_savings_usd.toFixed(4);
+              if (avgEl) avgEl.textContent = c.total_requests > 0 ? "$" + c.avg_cost_per_request.toFixed(6) : "$0.000000";
+            }
+            if (routeResp.ok) {
+              const r = await routeResp.json();
+              const smallEl = document.getElementById("pg-small-pct");
+              if (smallEl) {
+                const dist = r.routing_distribution || {};
+                const smallModel = "phi-2";
+                const pct = dist[smallModel] || 0;
+                smallEl.textContent = pct.toFixed(0) + "%";
+              }
+            }
+          } catch (err) {}
+        }
+
+        function renderDecision(data) {
+          const isLarge = data.target_tier === "large";
+          const savings = data.potential_savings_pct || 0;
+          const reasoning = Array.isArray(data.reasoning) ? data.reasoning : [];
+          const latency = typeof data.routing_latency_ms === "number" ? data.routing_latency_ms.toFixed(1) : "—";
+
+          const reasoningHtml = reasoning.length
+            ? '<div class="pg-reasoning">' + reasoning.map(function (r) {
+                return '<div class="pg-reason-item">' + escHtml(r) + '</div>';
+              }).join("") + '</div>'
+            : "";
+
+          resultContent.innerHTML =
+            '<div class="pg-decision">' +
+              '<div class="pg-model-row">' +
+                '<span class="pg-model-name" style="color:' + (isLarge ? "var(--amber)" : "var(--cyan)") + ';">' + escHtml(data.target_model) + '</span>' +
+                '<span class="pg-tier-badge ' + escHtml(data.target_tier) + '">' + escHtml(data.target_tier).toUpperCase() + '</span>' +
+              '</div>' +
+              '<div class="pg-score-row">' +
+                '<span>COMPLEXITY</span>' +
+                '<div class="pg-score-bar"><div class="pg-score-fill" style="width:' + Math.round(data.complexity_score * 100) + '%"></div></div>' +
+                '<span style="color:var(--white);font-weight:700;">' + data.complexity_score.toFixed(3) + '</span>' +
+              '</div>' +
+              '<div class="pg-cost-row">' +
+                '<div class="pg-cost-cell">' +
+                  '<div class="pg-cost-label">EST. COST</div>' +
+                  '<div class="pg-cost-value" style="color:var(--cyan);">$' + (data.estimated_cost || 0).toFixed(6) + '</div>' +
+                '</div>' +
+                '<div class="pg-cost-cell">' +
+                  '<div class="pg-cost-label">IF LARGE</div>' +
+                  '<div class="pg-cost-value" style="color:var(--muted);">$' + (data.cost_if_large || 0).toFixed(6) + '</div>' +
+                '</div>' +
+                '<div class="pg-cost-cell">' +
+                  '<div class="pg-cost-label">SAVINGS</div>' +
+                  '<div class="pg-cost-value" style="color:var(--amber);">' + savings.toFixed(1) + '%</div>' +
+                '</div>' +
+              '</div>' +
+              reasoningHtml +
+              '<div class="pg-latency">ROUTING LATENCY: ' + latency + ' ms</div>' +
+            '</div>';
+        }
+
+        function addHistory(data, promptText) {
+          localHistory.unshift({
+            model: data.target_model,
+            tier: data.target_tier,
+            prompt: promptText,
+            cost: data.estimated_cost || 0
+          });
+          if (localHistory.length > 8) localHistory.pop();
+          historyEl.innerHTML =
+            '<div class="pg-history-list">' +
+            localHistory.map(function (item) {
+              return '<div class="pg-history-item">' +
+                '<span class="pg-history-model" style="color:' + (item.tier === "large" ? "var(--amber)" : "var(--cyan)") + ';">' + escHtml(item.model) + '</span>' +
+                '<span class="pg-history-prompt">' + escHtml(item.prompt) + '</span>' +
+                '<span class="pg-history-cost">$' + item.cost.toFixed(6) + '</span>' +
+              '</div>';
+            }).join("") +
+            '</div>';
+        }
+
+        async function handleSubmit() {
+          const prompt = promptEl.value.trim();
+          if (!prompt) { promptEl.focus(); return; }
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = "ROUTING...";
+          resultContent.innerHTML = '<div class="pg-placeholder">Analyzing prompt...</div>';
+
+          try {
+            const forceModel = document.getElementById("pg-force-model").value || null;
+            const body = { prompt: prompt };
+            if (forceModel) body.force_model = forceModel;
+
+            const resp = await apiFetch("/v1/route", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body)
+            });
+
+            if (resp.ok) {
+              const data = await resp.json();
+              renderDecision(data);
+              addHistory(data, prompt);
+              fetchStats();
+            } else {
+              const err = await resp.json().catch(function () { return { detail: "Unknown error" }; });
+              resultContent.innerHTML = '<div class="pg-placeholder pg-error">API Error: ' + escHtml(err.detail || "Unknown") + '</div>';
+            }
+          } catch (err) {
+            resultContent.innerHTML =
+              '<div class="pg-placeholder pg-error">' +
+                'Cannot reach API at <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">' + API_BASE + '</code><br>' +
+                'Start the server: <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">uvicorn src.api.app:app --reload</code>' +
+              '</div>';
+          }
+
+          submitBtn.disabled = false;
+          submitBtn.textContent = "ANALYZE →";
+        }
+
+        submitBtn.addEventListener("click", handleSubmit);
+        promptEl.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && e.ctrlKey) handleSubmit();
+        });
+
+        if (resetBtn) {
+          resetBtn.addEventListener("click", async function () {
+            try {
+              const resp = await apiFetch("/v1/analytics/reset", { method: "POST" });
+              if (resp.ok) {
+                fetchStats();
+                ["pg-total-requests","pg-savings","pg-small-pct","pg-avg-cost"].forEach(function (id) {
+                  const el = document.getElementById(id);
+                  if (el) el.textContent = "—";
+                });
+              }
+            } catch (err) {}
+          });
+        }
+
+        checkApiStatus();
+        setInterval(checkApiStatus, 12000);
+        setInterval(fetchStats, 6000);
       }
 
       function initProblemChart() {
@@ -2595,117 +3131,122 @@
       let architecturePaths = [];
       let architecturePacketTweens = [];
 
-      function drawArchitectureLines() {
+      // onReady(paths) called once paths are drawn in the DOM
+      function drawArchitectureLines(onReady) {
         function renderLines() {
           architecturePacketTweens.forEach(function (tween) { tween.kill(); });
           architecturePacketTweens = [];
 
-        const wrap = document.getElementById("architecture-wrap");
-        const svg = document.getElementById("architecture-lines");
-        if (!wrap || !svg || window.innerWidth <= 768) {
-          architecturePaths = [];
-          return architecturePaths;
-        }
-        const wrapRect = wrap.getBoundingClientRect();
-        svg.setAttribute("viewBox", "0 0 " + wrapRect.width + " " + wrapRect.height);
-        svg.innerHTML = "";
+          const wrap = document.getElementById("architecture-wrap");
+          const svg = document.getElementById("architecture-lines");
+          if (!wrap || !svg || window.innerWidth <= 768) {
+            architecturePaths = [];
+            if (onReady) onReady([]);
+            return;
+          }
 
-        function pointFor(id, side) {
-          const rect = document.getElementById(id).getBoundingClientRect();
-          const x = side === "right" ? rect.right - wrapRect.left : rect.left - wrapRect.left;
-          const y = rect.top - wrapRect.top + rect.height / 2;
-          return { x: x, y: y };
+          const wrapRect = wrap.getBoundingClientRect();
+          svg.setAttribute("viewBox", "0 0 " + wrapRect.width + " " + wrapRect.height);
+          svg.innerHTML = "";
+
+          function pointFor(id, side) {
+            const el = document.getElementById(id);
+            if (!el) return { x: 0, y: 0 };
+            const rect = el.getBoundingClientRect();
+            return {
+              x: side === "right" ? rect.right - wrapRect.left : rect.left - wrapRect.left,
+              y: rect.top - wrapRect.top + rect.height / 2
+            };
+          }
+
+          function addPath(from, to, color, visible) {
+            const dx = Math.max(50, Math.abs(to.x - from.x) * 0.45);
+            const d = "M" + from.x + " " + from.y +
+              " C" + (from.x + dx) + " " + from.y +
+              ", " + (to.x - dx) + " " + to.y +
+              ", " + to.x + " " + to.y;
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", d);
+            path.setAttribute("stroke", color);
+            path.setAttribute("stroke-width", "1.5");
+            path.setAttribute("fill", "none");
+            path.setAttribute("opacity", visible ? "0.85" : "0");
+            svg.appendChild(path);
+            return path;
+          }
+
+          const gateway    = pointFor("gateway-card",   "right");
+          const routerLeft = pointFor("router-card",    "left");
+          const routerRight= pointFor("router-card",    "right");
+          const pathSpecs  = [
+            { path: addPath(gateway,     routerLeft,                         colors.blue,  false), color: colors.blue  },
+            { path: addPath(routerRight, pointFor("provider-gpt4",   "left"), colors.amber, false), color: colors.amber },
+            { path: addPath(routerRight, pointFor("provider-claude", "left"), colors.cyan,  false), color: colors.cyan  },
+            { path: addPath(routerRight, pointFor("provider-gemini", "left"), colors.blue,  false), color: colors.blue  },
+            { path: addPath(routerRight, pointFor("provider-llama",  "left"), colors.white, false), color: colors.white },
+            { path: addPath(routerRight, pointFor("provider-mistral","left"), colors.muted, false), color: colors.muted }
+          ];
+
+          pathSpecs.forEach(function (spec, index) {
+            const path   = spec.path;
+            const length = path.getTotalLength();
+            const packet = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            packet.setAttribute("r", "3");
+            packet.setAttribute("fill", spec.color);
+            packet.setAttribute("opacity", "0.95");
+            svg.appendChild(packet);
+            const state = { distance: 0 };
+            architecturePacketTweens.push(gsap.to(state, {
+              distance: length,
+              duration: 2.5,
+              repeat: -1,
+              ease: "none",
+              delay: index * 0.18,
+              onUpdate: function () {
+                const pt = path.getPointAtLength(state.distance);
+                packet.setAttribute("cx", pt.x);
+                packet.setAttribute("cy", pt.y);
+              }
+            }));
+          });
+
+          architecturePaths = pathSpecs.map(function (s) { return s.path; });
+          if (onReady) onReady(architecturePaths);
         }
 
-        function addPath(from, to, color) {
-          const dx = Math.max(50, Math.abs(to.x - from.x) * 0.45);
-          const d = "M" + from.x + " " + from.y + " C" + (from.x + dx) + " " + from.y + ", " + (to.x - dx) + " " + to.y + ", " + to.x + " " + to.y;
-          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute("d", d);
-          path.setAttribute("stroke", color);
-          path.setAttribute("stroke-width", "1.5");
-          path.setAttribute("fill", "none");
-          path.setAttribute("opacity", "0.85");
-          svg.appendChild(path);
-          return path;
-        }
-
-        const gateway = pointFor("gateway-card", "right");
-        const routerLeft = pointFor("router-card", "left");
-        const routerRight = pointFor("router-card", "right");
-        const pathSpecs = [
-          { path: addPath(gateway, routerLeft, colors.blue), color: colors.blue },
-          { path: addPath(routerRight, pointFor("provider-gpt4", "left"), colors.amber), color: colors.amber },
-          { path: addPath(routerRight, pointFor("provider-claude", "left"), colors.cyan), color: colors.cyan },
-          { path: addPath(routerRight, pointFor("provider-gemini", "left"), colors.blue), color: colors.blue },
-          { path: addPath(routerRight, pointFor("provider-llama", "left"), colors.white), color: colors.white },
-          { path: addPath(routerRight, pointFor("provider-mistral", "left"), colors.muted), color: colors.muted }
-        ];
-        pathSpecs.forEach(function (spec, index) {
-          const path = spec.path;
-          const length = path.getTotalLength();
-          path.style.strokeDasharray = length;
-          path.style.strokeDashoffset = length;
-          const packet = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          packet.setAttribute("r", "3");
-          packet.setAttribute("fill", spec.color);
-          packet.setAttribute("opacity", "0.95");
-          svg.appendChild(packet);
-          const state = { distance: 0 };
-          architecturePacketTweens.push(gsap.to(state, {
-            distance: length,
-            duration: 2.5,
-            repeat: -1,
-            ease: "none",
-            delay: index * 0.18,
-            onUpdate: function () {
-              const point = path.getPointAtLength(state.distance);
-              packet.setAttribute("cx", point.x);
-              packet.setAttribute("cy", point.y);
-            }
-          }));
-        });
-        architecturePaths = pathSpecs.map(function (spec) { return spec.path; });
-        return architecturePaths;
-        }
-
+        // Always wait for fonts so text-based layout is stable
         if (document.fonts && document.fonts.ready) {
           document.fonts.ready.then(renderLines);
-          return architecturePaths;
+        } else {
+          renderLines();
         }
-        return renderLines();
       }
 
       function initArchitecture() {
-        let paths = drawArchitectureLines();
-        setTimeout(function () {
-          paths = drawArchitectureLines();
-        }, 100);
-        window.addEventListener("resize", function () {
-          paths = drawArchitectureLines();
-        });
+        // Initial draw (lines hidden — will fade in on scroll)
+        drawArchitectureLines();
+        setTimeout(function () { drawArchitectureLines(); }, 200);
+
+        window.addEventListener("resize", function () { drawArchitectureLines(); });
+
         const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: "#architecture-wrap",
             start: "top 80%",
             once: true,
             onEnter: function () {
-              paths = drawArchitectureLines();
-              setTimeout(function () {
-                paths = drawArchitectureLines();
-              }, 100);
+              // Redraw with correct scroll-offset positions, then fade lines in
+              drawArchitectureLines(function (paths) {
+                if (paths && paths.length) {
+                  gsap.to(paths, { opacity: 0.85, duration: 0.9, ease: "power2.out", stagger: 0.08, delay: 0.5 });
+                }
+              });
             }
           }
         });
-        timeline.from(".ingress .arch-card", { x: -50, opacity: 0, duration: 0.6, ease: "power2.out" }, 0);
-        timeline.from(".core .arch-card", { y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, 0.2);
-        timeline.from(".providers .arch-card", { x: 50, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, 0.35);
-        timeline.add(function () {
-          const activePaths = paths && paths.length ? paths : architecturePaths;
-          if (activePaths && activePaths.length) {
-            gsap.to(activePaths, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut", stagger: 0.1 });
-          }
-        }, 0.9);
+        timeline.from(".ingress .arch-card",   { x: -50, opacity: 0, duration: 0.6, ease: "power2.out" }, 0);
+        timeline.from(".core .arch-card",      { y:  40, opacity: 0, duration: 0.6, stagger: 0.10, ease: "power2.out" }, 0.2);
+        timeline.from(".providers .arch-card", { x:  50, opacity: 0, duration: 0.6, stagger: 0.10, ease: "power2.out" }, 0.35);
       }
 
       function initScrollAnimations() {
@@ -2748,6 +3289,8 @@
       const heroNodes = initHeroThree();
       initDemoBlock();
       initTicker();
+      initNavApiStatus();
+      initLivePlayground();
       initFooterStars();
       setupLoadTimeline(heroNodes);
       initProblemChart();
